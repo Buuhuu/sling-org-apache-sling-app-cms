@@ -255,6 +255,12 @@
                 <version>2.4.2</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.sitemap</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!-- Utilities / Misc -->
             <dependency>

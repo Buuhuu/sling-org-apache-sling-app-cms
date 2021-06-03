@@ -17,7 +17,12 @@
 package org.apache.sling.cms.core.internal.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -38,6 +43,8 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 @Model(adaptables = Resource.class, adapters = Page.class)
 public class PageImpl extends PublishableResourceImpl implements Page {
 
+    private static final String[] EMPTY_ARRAY = new String[0];
+
     public static final Page getContainingPage(Resource resource) {
         Resource pageRsrc = CMSUtils.findParentResourceofType(resource, CMSConstants.NT_PAGE);
         Page page = null;
@@ -47,11 +54,35 @@ public class PageImpl extends PublishableResourceImpl implements Page {
         return page;
     }
 
+    private static Collection<String> normalizeRobotTags(String robotTags) {
+        if (robotTags == null || robotTags.length() == 0) {
+            return Collections.emptySet();
+        }
+
+        Set<String> robots = Arrays.stream(robotTags.split(",")).map(String::trim).collect(Collectors.toSet());
+        // normalize short-hands
+        if (robots.contains("all")) {
+            return Arrays.asList("index","follow");
+        }
+        if (robots.contains("none")) {
+            return Arrays.asList("noindex","nofollow");
+        }
+        if (robots.contains("noindex")) {
+            // noindex exludes all other controlls but (no)follow
+            return Arrays.asList("noindex", robots.contains("follow") ? "follow" : "nofollow");
+        }
+        // add index if needed
+        robots.add("index");
+        return robots;
+    }
+
     private final String[] taxonomy;
 
     private final String template;
 
     private final String title;
+
+    private final String[] robots;
 
     @Inject
     public PageImpl(@Self Resource resource) {
@@ -61,8 +92,10 @@ public class PageImpl extends PublishableResourceImpl implements Page {
             taxonomy = properties.get(CMSConstants.PN_TAXONOMY, String[].class);
             template = properties.get(CMSConstants.PN_TEMPLATE, String.class);
             title = properties.get(CMSConstants.PN_TITLE, String.class);
+            robots = normalizeRobotTags(properties.get("robots", String.class)).toArray(EMPTY_ARRAY);
         } else {
-            this.taxonomy = new String[0];
+            this.taxonomy = EMPTY_ARRAY;
+            this.robots = EMPTY_ARRAY;
             this.template = null;
             this.title = null;
         }
@@ -79,7 +112,7 @@ public class PageImpl extends PublishableResourceImpl implements Page {
                 }
             }
         }
-        return keywords.toArray(new String[keywords.size()]);
+        return keywords.toArray(EMPTY_ARRAY);
     }
 
     @Override
@@ -90,6 +123,16 @@ public class PageImpl extends PublishableResourceImpl implements Page {
         } else {
             return resource.getPath() + ".html";
         }
+    }
+
+    @Override
+    public String[] getRobotTags() {
+        if (robots.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        String[] tags = new String[robots.length];
+        System.arraycopy(robots, 0, tags, 0, robots.length);
+        return tags;
     }
 
     @Override

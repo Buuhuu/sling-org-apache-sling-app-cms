@@ -33,6 +33,13 @@ public interface Page extends PublishableResource {
     String[] getKeywords();
 
     /**
+     * Returns the robot tags for the page.
+     *
+     * @return the individual robot tags
+     */
+    String[] getRobotTags();
+
+    /**
      * Gets the sling:Template this page was configured with
      * 
      * @return the template for the page
