@@ -24,7 +24,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.cms.Site;
 import org.apache.sling.cms.SiteManager;
-import org.apache.sling.sitemap.Externalizer;
+import org.apache.sling.sitemap.common.Externalizer;
 import org.osgi.service.component.annotations.Component;
 
 @Component

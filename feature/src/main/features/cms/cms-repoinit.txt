@@ -88,6 +88,6 @@ end
 
 create path (sling:Folder) /var/sitemaps
 create service user sling-cms-sitemapwriter with path system/cms
-set ACL for sling-sitemap-writer
+set ACL for sling-cms-sitemapwriter
     allow jcr:all on /var/sitemaps
 end
