@@ -24,11 +24,11 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.cms.Site;
 import org.apache.sling.cms.SiteManager;
-import org.apache.sling.sitemap.common.Externalizer;
+import org.apache.sling.sitemap.common.SitemapLinkExternalizer;
 import org.osgi.service.component.annotations.Component;
 
 @Component
-public class ExternalizerImpl implements Externalizer {
+public class ExternalizerImpl implements SitemapLinkExternalizer {
 
     @Override
     public String externalize(SlingHttpServletRequest context, String uri) {

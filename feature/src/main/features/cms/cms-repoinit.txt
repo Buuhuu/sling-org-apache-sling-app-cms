@@ -89,5 +89,6 @@ end
 create path (sling:Folder) /var/sitemaps
 create service user sling-cms-sitemapwriter with path system/cms
 set ACL for sling-cms-sitemapwriter
+    allow jcr:read on /content
     allow jcr:all on /var/sitemaps
 end

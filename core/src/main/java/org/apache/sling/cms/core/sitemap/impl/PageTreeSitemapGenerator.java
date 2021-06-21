@@ -52,8 +52,4 @@ public class PageTreeSitemapGenerator extends ResourceTreeSitemapGenerator {
         return false;
     }
 
-    @Override
-    public @NotNull Set<String> getNames(@NotNull Resource sitemapRoot) {
-        return Collections.singleton(SitemapGenerator.DEFAULT_SITEMAP);
-    }
 }
